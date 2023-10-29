@@ -1,6 +1,5 @@
 import customtkinter
 from time import strftime
-import datetime
 from PIL import Image
 root=customtkinter.CTk()
 screen_width = root.winfo_screenwidth()
