@@ -41,4 +41,4 @@ def getText():
         
         # # Apply OCR on the cropped image
         text = pytesseract.image_to_string(cropped)
-    return text
+    return text.strip()
