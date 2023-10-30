@@ -3,6 +3,7 @@
 
 
 import cv2
+from mathFunctions import simplify
 import pytesseract
 def getText():
     # Mention the installed location of Tesseract-OCR in your system
@@ -42,3 +43,6 @@ def getText():
         # # Apply OCR on the cropped image
         text = pytesseract.image_to_string(cropped)
     return text.strip()
+
+print(getText())
+print(simplify(getText()))
