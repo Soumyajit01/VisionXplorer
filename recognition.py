@@ -45,4 +45,7 @@ def getText():
     return text.strip()
 
 print(getText())
-print(simplify(getText()))
+try:
+    print(simplify(getText()))
+except Exception as e:
+    pass
