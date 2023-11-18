@@ -1,4 +1,5 @@
 import customtkinter
+from tkinter import *
 from time import strftime
 from PIL import Image
 from tkintermapview import TkinterMapView
@@ -56,6 +57,12 @@ def toggleMap():
 		map.pack_forget()
 	except Exception:
 		map.pack()
+def toggleCalculator():
+	try:
+		calcF.pack_info()
+		calcF.pack_forget()
+	except Exception:
+		calcF.pack()
 
 mainF=customtkinter.CTkScrollableFrame(root,rootWidth,rootHeight*0.85)
 optionsF=customtkinter.CTkScrollableFrame(mainF,width=rootWidth*0.4,height=rootHeight*0.85)
@@ -67,7 +74,7 @@ monitoring_img = customtkinter.CTkImage(light_image=Image.open("img/monitoring.p
 calculator_img = customtkinter.CTkImage(light_image=Image.open("img/calculator.png"),size=(round(rootWidth*0.13),round(rootHeight*0.23)))
 
 monitoringBtn = customtkinter.CTkButton(optionsF, image=monitoring_img,text="",font=("Agency FB",fontSize),fg_color="#2b2b2b")
-calculatorBtn = customtkinter.CTkButton(optionsF, image=calculator_img,text="",font=("Agency FB",fontSize),fg_color="#2b2b2b")
+calculatorBtn = customtkinter.CTkButton(optionsF, image=calculator_img,text="",font=("Agency FB",fontSize),fg_color="#2b2b2b",command=toggleCalculator)
 time_lbl.pack()
 date_lbl.pack()
 work=customtkinter.CTkFrame(mainF,fg_color="#2b2b2b",width=rootWidth*0.6,height=rootHeight*0.85)
@@ -75,15 +82,91 @@ work=customtkinter.CTkFrame(mainF,fg_color="#2b2b2b",width=rootWidth*0.6,height=
 map=TkinterMapView(work,width=root.winfo_screenwidth()*0.6,height=root.winfo_screenheight()*0.6,corner_radius=5,max_zoom=20)
 map.set_address("IIT Roorkee, Uttarakhand",marker=True)
 
+
+expression = "" 
+def press(num): 
+	global expression 
+	expression = expression + str(num) 
+	equation.set(expression) 
+def equalpress(): 
+	try: 
+		global expression 
+		total = str(eval(expression)) 
+		equation.set(total) 
+		expression = "" 
+	except: 
+		equation.set(" error ") 
+		expression = "" 
+def clear(): 
+	global expression 
+	expression = "" 
+	equation.set("") 
+	
+equation = StringVar() 
+calcF=customtkinter.CTkFrame(work,fg_color="#2b2b2b",width=rootWidth*0.6,height=rootHeight*0.85)
+expression_field=customtkinter.CTkEntry(calcF,textvariable=equation,fg_color="#2d9a9d",height=rootHeight*0.10,width=rootWidth*0.6)
+expression_field.pack()
+
+keysF=customtkinter.CTkFrame(calcF,fg_color="#2b2b2b",width=rootWidth*0.6,height=rootHeight*0.75)
+button1 = customtkinter.CTkButton(keysF, text=' 1 ',  font=('Agency FB', round(rootHeight*0.1/2)),
+					command=lambda: press(1),  width=round(rootWidth*0.15),height=rootHeight*0.15) 
+button1.grid(row=2, column=0) 
+button2 = customtkinter.CTkButton(keysF, text=' 2 ',  font=('Agency FB', round(rootHeight*0.1/2)),
+					command=lambda: press(2),  width=round(rootWidth*0.15),height=rootHeight*0.15)
+button2.grid(row=2, column=1) 
+button3 = customtkinter.CTkButton(keysF, text=' 3 ',  font=('Agency FB', round(rootHeight*0.1/2)),
+					command=lambda: press(3),  width=round(rootWidth*0.15),height=rootHeight*0.15) 
+button3.grid(row=2, column=2) 
+button4 = customtkinter.CTkButton(keysF, text=' 4 ',  font=('Agency FB', round(rootHeight*0.1/2)),
+					command=lambda: press(4),  width=round(rootWidth*0.15),height=rootHeight*0.15) 
+button4.grid(row=3, column=0) 
+button5 = customtkinter.CTkButton(keysF, text=' 5 ',  font=('Agency FB', round(rootHeight*0.1/2)),
+					command=lambda: press(5),  width=round(rootWidth*0.15),height=rootHeight*0.15) 
+button5.grid(row=3, column=1) 
+button6 = customtkinter.CTkButton(keysF, text=' 6 ',  font=('Agency FB', round(rootHeight*0.1/2)),
+					command=lambda: press(6),  width=round(rootWidth*0.15),height=rootHeight*0.15) 
+button6.grid(row=3, column=2) 
+button7 = customtkinter.CTkButton(keysF, text=' 7 ',  font=('Agency FB', round(rootHeight*0.1/2)),
+					command=lambda: press(7),  width=round(rootWidth*0.15),height=rootHeight*0.15) 
+button7.grid(row=4, column=0) 
+button8 = customtkinter.CTkButton(keysF, text=' 8 ',  font=('Agency FB', round(rootHeight*0.1/2)),
+					command=lambda: press(8),  width=round(rootWidth*0.15),height=rootHeight*0.15) 
+button8.grid(row=4, column=1) 
+button9 = customtkinter.CTkButton(keysF, text=' 9 ',  font=('Agency FB', round(rootHeight*0.1/2)),
+					command=lambda: press(9),  width=round(rootWidth*0.15),height=rootHeight*0.15) 
+button9.grid(row=4, column=2) 
+button0 = customtkinter.CTkButton(keysF, text=' 0 ',  font=('Agency FB', round(rootHeight*0.1/2)),
+					command=lambda: press(0),  width=round(rootWidth*0.15),height=rootHeight*0.15) 
+button0.grid(row=5, column=0) 
+keysF.pack()
+plus = customtkinter.CTkButton(keysF, text=' + ',  font=('Agency FB', round(rootHeight*0.2/2)),
+					command=lambda: press("+"),  width=round(rootWidth*0.15),height=rootHeight*0.15) 
+plus.grid(row=2, column=3) 
+minus = customtkinter.CTkButton(keysF, text=' - ',  font=('Agency FB', round(rootHeight*0.2/2)),
+					command=lambda: press("-"),  width=round(rootWidth*0.15),height=rootHeight*0.15) 
+minus.grid(row=3, column=3) 
+multiply = customtkinter.CTkButton(keysF, text=' × ',  font=('Agency FB', round(rootHeight*0.2/2)),
+					command=lambda: press("*"),  width=round(rootWidth*0.15),height=rootHeight*0.15) 
+multiply.grid(row=4, column=3) 
+divide = customtkinter.CTkButton(keysF, text=' ÷ ',  font=('Agency FB', round(rootHeight*0.2/2)),
+					command=lambda: press("/"),  width=round(rootWidth*0.15),height=rootHeight*0.15) 
+divide.grid(row=5, column=3) 
+equal = customtkinter.CTkButton(keysF, text=' = ',  font=('Agency FB', round(rootHeight*0.2/2)),
+					command=equalpress,  width=round(rootWidth*0.15),height=rootHeight*0.15) 
+equal.grid(row=6, column=0,columnspan=4) 
+clear = customtkinter.CTkButton(keysF, text=' C ',  font=('Agency FB', round(rootHeight*0.1/2)),
+					command=clear,  width=round(rootWidth*0.15),height=rootHeight*0.15) 
+clear.grid(row=5, column='1') 
+Decimal= customtkinter.CTkButton(keysF, text=' . ',  font=('Agency FB', round(rootHeight*0.2/2)),
+					command=lambda: press("/"),  width=round(rootWidth*0.15),height=rootHeight*0.15) 
+# Decimal.grid(row=6, column=0) 
+Decimal.grid(row=5, column=2) 
+
 lanugageBtn.grid(row=0,column=0,pady=round(rootHeight*0.01))
 navigationBtn.grid(row=0,column=1,pady=round(rootHeight*0.01))
 monitoringBtn.grid(row=1,column=0,pady=round(rootHeight*0.01))
 calculatorBtn.grid(row=1,column=1,pady=round(rootHeight*0.01))
 optionsF.grid(row=0,column=0)
 work.grid(row=0,column=1)
-# print(bool(mainF.winfo_exists()))
-# print(bool(mainF.winfo_manager()))
-# print(mainF.pack_info())
 mainF.pack()
-# print(bool(mainF.winfo_manager()))
 root.mainloop()
