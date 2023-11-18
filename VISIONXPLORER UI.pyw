@@ -28,7 +28,8 @@ def time():
 	time_lbl.configure(text=string)
 	time_lbl.after(2, time)
 	hours =int(strftime("%H"))
-	if(hours<12 and hours>0):
+	# print(hours)
+	if(hours<12 and hours>=0):
 		greetMessage="Good Morning," 
 	elif(hours>=12 and hours<17):
 		greetMessage="Good Afternoon,"
@@ -52,12 +53,14 @@ time()
 date()
 
 def toggleMap():
+	calcF.pack_forget()
 	try:
 		map.pack_info()
 		map.pack_forget()
 	except Exception:
 		map.pack()
 def toggleCalculator():
+	map.pack_forget()
 	try:
 		calcF.pack_info()
 		calcF.pack_forget()
@@ -65,7 +68,7 @@ def toggleCalculator():
 		calcF.pack()
 
 mainF=customtkinter.CTkScrollableFrame(root,rootWidth,rootHeight*0.85)
-optionsF=customtkinter.CTkScrollableFrame(mainF,width=rootWidth*0.4,height=rootHeight*0.85)
+optionsF=customtkinter.CTkScrollableFrame(mainF,width=rootWidth*0.36,height=rootHeight*0.85)
 language_img = customtkinter.CTkImage(light_image=Image.open("img/language.jpg"),size=(round(rootWidth*0.13),round(rootHeight*0.23)))
 lanugageBtn = customtkinter.CTkButton(optionsF, image=language_img,text="",font=("Agency FB",fontSize),fg_color="#2b2b2b")
 navigation_img = customtkinter.CTkImage(light_image=Image.open("img/navigation.png"),size=(round(rootWidth*0.13),round(rootHeight*0.23)))
