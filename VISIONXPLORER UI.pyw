@@ -4,6 +4,7 @@ from time import strftime
 from PIL import Image
 from tkintermapview import TkinterMapView
 from geopy.geocoders import Nominatim
+import os
 
 root=customtkinter.CTk()
 screen_width = root.winfo_screenwidth()
@@ -67,7 +68,8 @@ def toggleCalculator():
 		calcF.pack_forget()
 	except Exception:
 		calcF.pack()
-
+def launchObjDetection():
+    os.startfile("objDetection_webcam.pyw")
 mainF=customtkinter.CTkScrollableFrame(root,rootWidth,rootHeight*0.85)
 optionsF=customtkinter.CTkScrollableFrame(mainF,width=rootWidth*0.36,height=rootHeight*0.85)
 language_img = customtkinter.CTkImage(light_image=Image.open("img/language.jpg"),size=(round(rootWidth*0.13),round(rootHeight*0.23)))
@@ -77,7 +79,7 @@ navigationBtn = customtkinter.CTkButton(optionsF, image=navigation_img,text="",f
 monitoring_img = customtkinter.CTkImage(light_image=Image.open("img/monitoring.png"),size=(round(rootWidth*0.13),round(rootHeight*0.23)))
 calculator_img = customtkinter.CTkImage(light_image=Image.open("img/calculator.png"),size=(round(rootWidth*0.13),round(rootHeight*0.23)))
 
-monitoringBtn = customtkinter.CTkButton(optionsF, image=monitoring_img,text="",font=("Agency FB",fontSize),fg_color="#2b2b2b")
+monitoringBtn = customtkinter.CTkButton(optionsF, image=monitoring_img,text="",font=("Agency FB",fontSize),fg_color="#2b2b2b",command=launchObjDetection)
 calculatorBtn = customtkinter.CTkButton(optionsF, image=calculator_img,text="",font=("Agency FB",fontSize),fg_color="#2b2b2b",command=toggleCalculator)
 time_lbl.pack()
 date_lbl.pack()
