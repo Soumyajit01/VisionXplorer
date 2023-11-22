@@ -3,6 +3,7 @@ from tkinter import *
 from time import strftime
 from PIL import Image
 from tkintermapview import TkinterMapView
+from geopy.geocoders import Nominatim
 
 root=customtkinter.CTk()
 screen_width = root.winfo_screenwidth()
@@ -82,7 +83,14 @@ time_lbl.pack()
 date_lbl.pack()
 work=customtkinter.CTkFrame(mainF,fg_color="#2b2b2b",width=rootWidth*0.6,height=rootHeight*0.85)
 
+def getLocationCoordinates(location):
+	loc = Nominatim(user_agent="Get")
+	getLoc = loc.geocode(location)
+	return (getLoc.latitude, getLoc.longitude)
+
 map=TkinterMapView(work,width=root.winfo_screenwidth()*0.6,height=root.winfo_screenheight()*0.6,corner_radius=5,max_zoom=20)
+# map.set_tile_server("https://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}&s=Ga") # this is for getting satellite image
+map.set_path([getLocationCoordinates("IITR"), getLocationCoordinates("Haridwar")]) # we can pass as many locataion here
 map.set_address("IIT Roorkee, Uttarakhand",marker=True)
 
 
