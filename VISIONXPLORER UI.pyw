@@ -83,7 +83,7 @@ def startMonitoring():
 monitoringBtn = customtkinter.CTkButton(optionsF, image=monitoring_img,text="",font=("Agency FB",fontSize),fg_color="#2b2b2b") #add a command=startMonitoring attribute to integrate the monitoring thing.
 calculatorBtn = customtkinter.CTkButton(optionsF, image=calculator_img,text="",font=("Agency FB",fontSize),fg_color="#2b2b2b",command=toggleCalculator)
 time_lbl.pack()
-date_lbl.pack()
+# date_lbl.pack() # remove date label
 work=customtkinter.CTkFrame(mainF,fg_color="#2b2b2b",width=rootWidth*0.6,height=rootHeight*0.85)
 
 def getLocationCoordinates(location):
