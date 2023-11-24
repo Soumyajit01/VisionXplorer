@@ -1,10 +1,12 @@
 import customtkinter
 from tkinter import *
 from time import strftime
-from PIL import Image
+from PIL import Image,ImageTk
 from tkintermapview import TkinterMapView
 from geopy.geocoders import Nominatim
 from ultralytics import YOLO
+import os
+import cv2
 
 model = YOLO('yolov8n.pt')
 
@@ -99,6 +101,38 @@ def toggleCalculator():
     except Exception:
         calcF.pack()
 
+def toggleMonitoring():
+    calcF.pack_forget()
+    map.pack_forget()
+    try:
+        monitoringF.pack_info()
+        monitoringF.pack_forget()
+    except Exception:
+        monitoringF.pack()
+        label = customtkinter.CTkLabel(monitoringF, width=200, height=300,text="")
+        label.pack()
+        def stop():
+            os.startfile("VISIONXPLORER UI.pyw")
+            root.destroy()
+            
+        btn=customtkinter.CTkButton(monitoringF, text="stopcam",command=stop)
+        btn.pack()
+        cap = cv2.VideoCapture(0)
+        def update_frame():
+            ret, frame = cap.read()
+            if ret:
+                frame = cv2.resize(frame, (200, 200)) # resize the frame to 200x200
+                img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                results=model.track(img,persist=True)
+                img=results[0].plot()
+                img = Image.fromarray(img)
+                imgtk = ImageTk.PhotoImage(image=img)
+                label.imgtk = imgtk
+                label.configure(image=imgtk)
+            root.after(10, update_frame)
+
+        update_frame()
+
 
 mainF = customtkinter.CTkScrollableFrame(root, rootWidth, rootHeight * 0.85)
 optionsF = customtkinter.CTkScrollableFrame(
@@ -137,14 +171,6 @@ calculator_img = customtkinter.CTkImage(
 )
 
 
-def toggleMonitoring():
-    calcF.pack_forget()
-    map.pack_forget()
-    try:
-        monitoringF.pack_info()
-        monitoringF.pack_forget()
-    except Exception:
-        monitoringF.pack()
 
 
 monitoringBtn = customtkinter.CTkButton(
@@ -184,10 +210,10 @@ map = TkinterMapView(
     max_zoom=20,
 )
 # map.set_tile_server("https://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}&s=Ga") # this is for getting satellite image
-map.set_path(
-    [getLocationCoordinates("IITR"), getLocationCoordinates("Haridwar")]
-)  # we can pass as many locataion here
-map.set_address("IIT Roorkee, Uttarakhand", marker=True)
+# map.set_path(
+#     [getLocationCoordinates("IITR"), getLocationCoordinates("Haridwar")]
+# )  # we can pass as many locataion here
+# map.set_address("IIT Roorkee, Uttarakhand", marker=True)
 
 
 expression = ""
@@ -221,7 +247,7 @@ calcF = customtkinter.CTkFrame(
     work, fg_color="#2b2b2b", width=rootWidth * 0.6, height=rootHeight * 0.85
 )
 monitoringF = customtkinter.CTkFrame(
-    work, fg_color="red", width=rootWidth * 0.6, height=rootHeight * 0.85
+    work, fg_color="#2b2b2b", width=rootWidth * 0.6, height=rootHeight * 0.85
 )
 expression_field = customtkinter.CTkEntry(
     calcF,

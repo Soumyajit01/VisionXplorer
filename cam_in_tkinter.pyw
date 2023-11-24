@@ -5,17 +5,23 @@ from PIL import Image, ImageTk
 from ultralytics import YOLO
 
 model = YOLO('yolov8n.pt')
-window = customtkinter.CTk()
-window.geometry("400x300")
 
+
+window = customtkinter.CTk()
+window.title("VisionXplorer")
+window.geometry("200x200")
+customtkinter.set_appearance_mode("dark")
+customtkinter.set_default_color_theme("blue")
 frame =customtkinter.CTkFrame(window)
 frame.pack()
-
 label = customtkinter.CTkLabel(frame, width=200, height=200,text="")
 label.pack()
-
+def stop():
+    cv2.destroyAllWindows()
+    window.destroy()
+btn=customtkinter.CTkButton(frame, text="stopcam",command=stop)
+btn.pack()
 cap = cv2.VideoCapture(0)
-
 def update_frame():
     ret, frame = cap.read()
     if ret:
