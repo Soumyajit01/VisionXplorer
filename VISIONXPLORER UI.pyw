@@ -4,10 +4,13 @@ from time import strftime
 from PIL import Image, ImageTk
 from tkintermapview import TkinterMapView
 from geopy.geocoders import Nominatim
+
 from ultralytics import YOLO
 import os
 import cv2
 from translator import translateToHindi
+from text_recognition import getText
+
 model = YOLO("yolov8n.pt")
 
 root = customtkinter.CTk()
@@ -85,6 +88,7 @@ date()
 def toggleMap():
     calcF.pack_forget()
     monitoringF.pack_forget()
+    translationF.pack_forget()
     try:
         map.pack_info()
         map.pack_forget()
@@ -95,6 +99,7 @@ def toggleMap():
 def toggleCalculator():
     map.pack_forget()
     monitoringF.pack_forget()
+    translationF.pack_forget()
     try:
         calcF.pack_info()
         calcF.pack_forget()
@@ -102,41 +107,102 @@ def toggleCalculator():
         calcF.pack()
 
 
+def toggleTranslationF():
+    map.pack_forget()
+    monitoringF.pack_forget()
+    calcF.pack_forget()
+    try:
+        translationF.pack_info()
+        translationF.pack_forget()
+    except Exception:
+        translationF.pack()
+        translationF.pack_propagate(False)
+
+        label = customtkinter.CTkLabel(
+            translationF, text="", width=300, height=300, fg_color="#2d2d2d"
+        )
+        label.pack(side="top")
+        vidSrc = "./vid4.mp4"
+
+        def stop():
+            cap.release()
+            translationF.pack_forget()
+            label.pack_forget()
+            btn_stopcam.pack_forget()
+            warning.pack_forget()
+        btn_stopcam = customtkinter.CTkButton(
+            translationF,
+            text="Stop Cam",
+            font=("Agency FB", round(fontSize * 0.6)),
+            fg_color="#2d9a9d",
+            command=stop,
+        )
+        btn_stopcam.pack(side="left")
+        warning = customtkinter.CTkLabel(
+            translationF,
+            text="*STOP THIS CAM BEFORE SWITCHING TO OTHER TAB",
+            font=("Agency FB", round(fontSize * 0.6)),
+            text_color="red",
+        )
+        warning.pack(side="left")
+        cap = cv2.VideoCapture(0)
+        def update_frame():
+            ret, frame = cap.read()
+            if ret:
+                frame = cv2.resize(frame, (300, 300))
+                img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                img = Image.fromarray(img)
+                imgtk = ImageTk.PhotoImage(image=img)
+                label.imgtk = imgtk
+                label.configure(image=imgtk)
+            root.after(10, update_frame)
+
+        update_frame()
+
+
 def toggleMonitoring():
     calcF.pack_forget()
     map.pack_forget()
+    translationF.pack_forget()
     try:
         monitoringF.pack_info()
         monitoringF.pack_forget()
     except Exception:
         monitoringF.pack()
-        monitoringBtn.grid_forget()
+        monitoringF.pack_propagate(False)
+        # monitoringBtn.grid_forget()
         label = customtkinter.CTkLabel(monitoringF, width=200, height=300, text="")
         label.pack()
 
         def stop():
-            os.startfile("VISIONXPLORER UI.pyw")
-            root.destroy()
+            cap.release()
+            monitoringF.pack_forget()
+            label.pack_forget()
+            btn_stopcam.pack_forget()
+            warning.pack_forget()
 
-        btn = customtkinter.CTkButton(
+        btn_stopcam = customtkinter.CTkButton(
             monitoringF,
             text="Stop Cam",
-            font=("Agency FB", round(fontSize*0.6)),
+            font=("Agency FB", round(fontSize * 0.6)),
             fg_color="#2d9a9d",
             command=stop,
         )
-        btn.pack(side="left")
+        btn_stopcam.pack(side="left")
 
-        customtkinter.CTkLabel(monitoringF,
-    text="*stopping this will take few seconds",
-    font=("Agency FB", round(fontSize*0.6)),
-    text_color="red").pack(side="right")
+        warning = customtkinter.CTkLabel(
+            monitoringF,
+            text="*STOP THIS CAM BEFORE SWITCHING TO OTHER TAB",
+            font=("Agency FB", round(fontSize * 0.6)),
+            text_color="red",
+        )
+        warning.pack(side="left")
         cap = cv2.VideoCapture(0)
 
         def update_frame():
             ret, frame = cap.read()
             if ret:
-                frame = cv2.resize(frame, (200, 200))  # resize the frame to 200x200
+                frame = cv2.resize(frame, (300, 300)) 
                 img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 results = model.track(img, persist=True)
                 img = results[0].plot()
@@ -153,16 +219,17 @@ mainF = customtkinter.CTkScrollableFrame(root, rootWidth, rootHeight * 0.85)
 optionsF = customtkinter.CTkScrollableFrame(
     mainF, width=rootWidth * 0.36, height=rootHeight * 0.85
 )
-language_img = customtkinter.CTkImage(
-    light_image=Image.open("img/language.jpg"),
+translation_img = customtkinter.CTkImage(
+    light_image=Image.open("img/translation.jpg"),
     size=(round(rootWidth * 0.13), round(rootHeight * 0.23)),
 )
-languageBtn = customtkinter.CTkButton(
+translationBtn = customtkinter.CTkButton(
     optionsF,
-    image=language_img,
+    image=translation_img,
     text="",
     font=("Agency FB", fontSize),
-    fg_color="#2b2b2b"
+    fg_color="#2b2b2b",
+    command=toggleTranslationF,
 )
 navigation_img = customtkinter.CTkImage(
     light_image=Image.open("img/navigation.png"),
@@ -222,10 +289,10 @@ map = TkinterMapView(
     corner_radius=5,
     max_zoom=20,
 )
-map.set_tile_server("https://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}&s=Ga") # this is for getting satellite image
+# map.set_tile_server("https://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}&s=Ga") # this is for getting satellite image
 map.set_path(
     [getLocationCoordinates("IITR"), getLocationCoordinates("Haridwar")]
-)  # we can pass as many locataion here
+)  # we can pass as many locataions here
 map.set_address("IIT Roorkee, Uttarakhand", marker=True)
 
 
@@ -258,6 +325,9 @@ def clear():
 equation = StringVar()
 calcF = customtkinter.CTkFrame(
     work, fg_color="#2b2b2b", width=rootWidth * 0.6, height=rootHeight * 0.85
+)
+translationF = customtkinter.CTkFrame(
+    work, fg_color="#2d2d2d", width=rootWidth * 0.6, height=rootHeight * 0.85
 )
 monitoringF = customtkinter.CTkFrame(
     work, fg_color="#2b2b2b", width=rootWidth * 0.6, height=rootHeight * 0.85
@@ -430,7 +500,7 @@ Decimal = customtkinter.CTkButton(
 # Decimal.grid(row=6, column=0)
 Decimal.grid(row=5, column=2)
 
-languageBtn.grid(row=0, column=0, pady=round(rootHeight * 0.01))
+translationBtn.grid(row=0, column=0, pady=round(rootHeight * 0.01))
 navigationBtn.grid(row=0, column=1, pady=round(rootHeight * 0.01))
 monitoringBtn.grid(row=1, column=0, pady=round(rootHeight * 0.01))
 calculatorBtn.grid(row=1, column=1, pady=round(rootHeight * 0.01))

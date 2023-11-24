@@ -5,11 +5,11 @@
 import cv2
 from mathFunctions import simplify
 import pytesseract
-def getText():
+def getText(filename):
     # Mention the installed location of Tesseract-OCR in your system
     pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
     # Read image from which text needs to be extracted
-    img = cv2.imread("sample.jpg")
+    img = cv2.imread(filename)
     # Preprocessing the image starts
     # Convert the image to gray scale
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -42,10 +42,8 @@ def getText():
         
         # # Apply OCR on the cropped image
         text = pytesseract.image_to_string(cropped)
-    return text.strip()
-
-print(getText())
-try:
-    print(simplify(getText()))
-except Exception as e:
-    pass
+    try:
+        return [text.replace("\n",""),eval(text.strip().replace(" ","").replace("\n",""))]
+    except Exception:
+        return text.strip().replace("\n","")
+print(getText("sample2.jpg"))

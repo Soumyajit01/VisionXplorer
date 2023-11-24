@@ -2,23 +2,23 @@ import tkinter as tk
 import customtkinter
 import cv2
 from PIL import Image, ImageTk
-
-
 window = customtkinter.CTk()
-window.title("VisionXplorer")
-window.geometry("200x200")
+# window.title("VisionXplorer")
+window.geometry("300x300")
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("blue")
 frame =customtkinter.CTkFrame(window)
 frame.pack()
-label = customtkinter.CTkLabel(frame, width=200, height=200,text="")
+label = customtkinter.CTkLabel(frame, width=200,text="")#, height=200
 label.pack()
 def stop():
     cv2.destroyAllWindows()
-    window.destroy()
+    frame.destroy()
+    cap.release()
 btn=customtkinter.CTkButton(frame, text="stopcam",command=stop)
 btn.pack()
-cap = cv2.VideoCapture("./vid4.mp4")
+# vidSrc="./vid4.mp4"
+cap = cv2.VideoCapture(0)
 def update_frame():
     ret, frame = cap.read()
     if ret:

@@ -21,7 +21,6 @@ def getText(filename):
     except Exception:
         return text.strip().replace("\n","")
 
-import cv2
 vidPath="./vid4.mp4"
 cap=cv2.VideoCapture(vidPath)
 ret=True
