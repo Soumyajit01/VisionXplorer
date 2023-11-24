@@ -153,7 +153,7 @@ def toggleTranslationF():
             text_color="red",
         )
         warning.pack(side="left")
-        cap = cv2.VideoCapture("sample_footage.mp4")
+        cap = cv2.VideoCapture("sample_footage.mp4") # change this to '0' for making webcam input source
 
         def update_frame():
             ret, frame = cap.read()
