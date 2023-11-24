@@ -112,10 +112,9 @@ def toggleMonitoring():
         label = customtkinter.CTkLabel(monitoringF, width=200, height=300,text="")
         label.pack()
         def stop():
-            cv2.destroyAllWindows()
-            monitoringF.destroy()
-            label.destroy()
-            monitoringF.destroy()
+            os.startfile("VISIONXPLORER UI.pyw")
+            root.destroy()
+            
         btn=customtkinter.CTkButton(monitoringF, text="stopcam",command=stop)
         btn.pack()
         cap = cv2.VideoCapture(0)
@@ -211,10 +210,10 @@ map = TkinterMapView(
     max_zoom=20,
 )
 # map.set_tile_server("https://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}&s=Ga") # this is for getting satellite image
-map.set_path(
-    [getLocationCoordinates("IITR"), getLocationCoordinates("Haridwar")]
-)  # we can pass as many locataion here
-map.set_address("IIT Roorkee, Uttarakhand", marker=True)
+# map.set_path(
+#     [getLocationCoordinates("IITR"), getLocationCoordinates("Haridwar")]
+# )  # we can pass as many locataion here
+# map.set_address("IIT Roorkee, Uttarakhand", marker=True)
 
 
 expression = ""
