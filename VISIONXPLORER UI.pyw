@@ -80,7 +80,7 @@ monitoring_img = customtkinter.CTkImage(light_image=Image.open("img/monitoring.p
 calculator_img = customtkinter.CTkImage(light_image=Image.open("img/calculator.png"),size=(round(rootWidth*0.13),round(rootHeight*0.23)))
 def startMonitoring():
 	os.starfile("objDetection_webcam.pyw")
-monitoringBtn = customtkinter.CTkButton(optionsF, image=monitoring_img,text="",font=("Agency FB",fontSize),fg_color="#2b2b2b") #add a command=startMonitoring attribute to integrate the monitoring thing.
+monitoringBtn = customtkinter.CTkButton(optionsF, image=monitoring_img,text="",font=("Agency FB",fontSize),fg_color="#2b2b2b",command=startMonitoring) #add a command=startMonitoring attribute to integrate the monitoring thing.
 calculatorBtn = customtkinter.CTkButton(optionsF, image=calculator_img,text="",font=("Agency FB",fontSize),fg_color="#2b2b2b",command=toggleCalculator)
 time_lbl.pack()
 # date_lbl.pack() # remove date label
