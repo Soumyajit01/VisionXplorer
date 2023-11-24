@@ -273,6 +273,10 @@ calculator_img = customtkinter.CTkImage(
     light_image=Image.open("img/calculator.png"),
     size=(round(rootWidth * 0.13), round(rootHeight * 0.23)),
 )
+exit_img = customtkinter.CTkImage(
+    light_image=Image.open("img/exit.png"),
+    size=(round(rootWidth * 0.13), round(rootHeight * 0.23)),
+)
 
 
 monitoringBtn = customtkinter.CTkButton(
@@ -291,6 +295,17 @@ calculatorBtn = customtkinter.CTkButton(
     fg_color="#2b2b2b",
     command=toggleCalculator,
 )
+def exit():
+    root.destroy()
+exitBtn=customtkinter.CTkButton(
+    optionsF,
+    image=exit_img,
+    text="",
+    font=("Agency FB", fontSize),
+    fg_color="#2b2b2b",
+    command=exit,
+)
+
 time_lbl.pack()
 # date_lbl.pack() # remove date label
 work = customtkinter.CTkFrame(
@@ -526,6 +541,7 @@ translationBtn.grid(row=0, column=0, pady=round(rootHeight * 0.01))
 navigationBtn.grid(row=0, column=1, pady=round(rootHeight * 0.01))
 monitoringBtn.grid(row=1, column=0, pady=round(rootHeight * 0.01))
 calculatorBtn.grid(row=1, column=1, pady=round(rootHeight * 0.01))
+exitBtn.grid(row=2, column=0, pady=round(rootHeight * 0.01))
 optionsF.grid(row=0, column=0)
 work.grid(row=0, column=1)
 mainF.pack()
