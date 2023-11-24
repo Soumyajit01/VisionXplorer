@@ -7,7 +7,7 @@ from geopy.geocoders import Nominatim
 from ultralytics import YOLO
 import os
 import cv2
-
+from translator import translateToHindi
 model = YOLO("yolov8n.pt")
 
 root = customtkinter.CTk()
@@ -110,6 +110,7 @@ def toggleMonitoring():
         monitoringF.pack_forget()
     except Exception:
         monitoringF.pack()
+        monitoringBtn.grid_forget()
         label = customtkinter.CTkLabel(monitoringF, width=200, height=300, text="")
         label.pack()
 
@@ -156,12 +157,12 @@ language_img = customtkinter.CTkImage(
     light_image=Image.open("img/language.jpg"),
     size=(round(rootWidth * 0.13), round(rootHeight * 0.23)),
 )
-lanugageBtn = customtkinter.CTkButton(
+languageBtn = customtkinter.CTkButton(
     optionsF,
     image=language_img,
     text="",
     font=("Agency FB", fontSize),
-    fg_color="#2b2b2b",
+    fg_color="#2b2b2b"
 )
 navigation_img = customtkinter.CTkImage(
     light_image=Image.open("img/navigation.png"),
@@ -221,11 +222,11 @@ map = TkinterMapView(
     corner_radius=5,
     max_zoom=20,
 )
-# map.set_tile_server("https://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}&s=Ga") # this is for getting satellite image
-# map.set_path(
-#     [getLocationCoordinates("IITR"), getLocationCoordinates("Haridwar")]
-# )  # we can pass as many locataion here
-# map.set_address("IIT Roorkee, Uttarakhand", marker=True)
+map.set_tile_server("https://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}&s=Ga") # this is for getting satellite image
+map.set_path(
+    [getLocationCoordinates("IITR"), getLocationCoordinates("Haridwar")]
+)  # we can pass as many locataion here
+map.set_address("IIT Roorkee, Uttarakhand", marker=True)
 
 
 expression = ""
@@ -422,14 +423,14 @@ Decimal = customtkinter.CTkButton(
     keysF,
     text=" . ",
     font=("Agency FB", round(rootHeight * 0.2 / 2)),
-    command=lambda: press("/"),
+    command=lambda: press("."),
     width=round(rootWidth * 0.15),
     height=rootHeight * 0.15,
 )
 # Decimal.grid(row=6, column=0)
 Decimal.grid(row=5, column=2)
 
-lanugageBtn.grid(row=0, column=0, pady=round(rootHeight * 0.01))
+languageBtn.grid(row=0, column=0, pady=round(rootHeight * 0.01))
 navigationBtn.grid(row=0, column=1, pady=round(rootHeight * 0.01))
 monitoringBtn.grid(row=1, column=0, pady=round(rootHeight * 0.01))
 calculatorBtn.grid(row=1, column=1, pady=round(rootHeight * 0.01))
