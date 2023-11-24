@@ -1,16 +1,17 @@
 import tkinter as tk
+import customtkinter
 import cv2
 from PIL import Image, ImageTk
 from ultralytics import YOLO
 
 model = YOLO('yolov8n.pt')
-window = tk.Tk()
+window = customtkinter.CTk()
 window.geometry("400x300")
 
-frame = tk.Frame(window)
+frame =customtkinter.CTkFrame(window)
 frame.pack()
 
-label = tk.Label(frame, width=200, height=200)
+label = customtkinter.CTkLabel(frame, width=200, height=200,text="")
 label.pack()
 
 cap = cv2.VideoCapture(0)
