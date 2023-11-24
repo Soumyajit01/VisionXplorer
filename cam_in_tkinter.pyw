@@ -17,8 +17,8 @@ def stop():
     cap.release()
 btn=customtkinter.CTkButton(frame, text="stopcam",command=stop)
 btn.pack()
-# vidSrc="./vid4.mp4"
-cap = cv2.VideoCapture(0)
+vidSrc="./vid4.mp4"
+cap = cv2.VideoCapture(vidSrc)
 def update_frame():
     ret, frame = cap.read()
     if ret:

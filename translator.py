@@ -1,10 +1,6 @@
-import requests
-from urllib.parse import quote
+from googletrans import Translator
+def translateToHindi(text):
+    translator = Translator()
 
-def translateToHindi(text):   
-    def encodeURIComponent(url):
-        return quote(url)
-    encoded_text = encodeURIComponent(text)
-    response = requests.get(f"https://t.song.work/api?text={encoded_text}&from=en&to=hi")
-    data = response.json()
-    return dict(data)["result"]
+    translated_text = translator.translate(text,dest="hi")
+    return translated_text.text.strip()

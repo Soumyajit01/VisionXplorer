@@ -4,12 +4,13 @@ from time import strftime
 from PIL import Image, ImageTk
 from tkintermapview import TkinterMapView
 from geopy.geocoders import Nominatim
-
+from numpy import asarray
+from mathFunctions import simplify
 from ultralytics import YOLO
 import os
 import cv2
 from translator import translateToHindi
-from text_recognition import getText
+from text_recognition import detectText
 
 model = YOLO("yolov8n.pt")
 
@@ -119,10 +120,10 @@ def toggleTranslationF():
         translationF.pack_propagate(False)
 
         label = customtkinter.CTkLabel(
-            translationF, text="", width=300, height=300, fg_color="#2d2d2d"
+            translationF, text="", width=400, height=300, fg_color="#2b2b2b"
         )
         label.pack(side="top")
-        vidSrc = "./vid4.mp4"
+        vidSrc = "./sample_footage.mp4"
 
         def stop():
             cap.release()
@@ -130,6 +131,13 @@ def toggleTranslationF():
             label.pack_forget()
             btn_stopcam.pack_forget()
             warning.pack_forget()
+        detectedText=customtkinter.CTkLabel(
+            translationF,
+            text="",
+            font=("Agency FB", fontSize),
+            text_color="#2d9a9d",
+        )
+        detectedText.pack()
         btn_stopcam = customtkinter.CTkButton(
             translationF,
             text="Stop Cam",
@@ -145,12 +153,26 @@ def toggleTranslationF():
             text_color="red",
         )
         warning.pack(side="left")
-        cap = cv2.VideoCapture(0)
+        cap = cv2.VideoCapture("sample_footage.mp4")
+
         def update_frame():
             ret, frame = cap.read()
             if ret:
-                frame = cv2.resize(frame, (300, 300))
+                frame = cv2.resize(frame, (400, 300))
                 img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                cv2.imwrite("tempImg.jpg", frame)
+                try:
+                    text=detectText("tempImg.jpg")
+                    toSend=text+"="+str(eval(text))
+                    detectedText.configure(text=toSend)
+                except Exception:
+                    try:
+                        toSend_=translateToHindi(detectText("tempImg.jpg").replace("\n", ""))
+                        print(toSend_)
+                        detectedText.configure(text=toSend_)
+                    except Exception:
+                        toSend__="No text detected!"
+                        print(toSend__)
                 img = Image.fromarray(img)
                 imgtk = ImageTk.PhotoImage(image=img)
                 label.imgtk = imgtk
@@ -202,7 +224,7 @@ def toggleMonitoring():
         def update_frame():
             ret, frame = cap.read()
             if ret:
-                frame = cv2.resize(frame, (300, 300)) 
+                frame = cv2.resize(frame, (300, 300))
                 img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 results = model.track(img, persist=True)
                 img = results[0].plot()
@@ -215,9 +237,9 @@ def toggleMonitoring():
         update_frame()
 
 
-mainF = customtkinter.CTkScrollableFrame(root, rootWidth, rootHeight * 0.85)
+mainF = customtkinter.CTkFrame(root, rootWidth, rootHeight * 0.85)
 optionsF = customtkinter.CTkScrollableFrame(
-    mainF, width=rootWidth * 0.36, height=rootHeight * 0.85
+    mainF, width=rootWidth * 0.36, height=rootHeight * 0.85, fg_color="#2b2b2b"
 )
 translation_img = customtkinter.CTkImage(
     light_image=Image.open("img/translation.jpg"),
