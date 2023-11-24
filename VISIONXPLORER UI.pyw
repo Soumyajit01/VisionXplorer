@@ -1,14 +1,14 @@
 import customtkinter
 from tkinter import *
 from time import strftime
-from PIL import Image,ImageTk
+from PIL import Image, ImageTk
 from tkintermapview import TkinterMapView
 from geopy.geocoders import Nominatim
 from ultralytics import YOLO
 import os
 import cv2
 
-model = YOLO('yolov8n.pt')
+model = YOLO("yolov8n.pt")
 
 root = customtkinter.CTk()
 screen_width = root.winfo_screenwidth()
@@ -101,6 +101,7 @@ def toggleCalculator():
     except Exception:
         calcF.pack()
 
+
 def toggleMonitoring():
     calcF.pack_forget()
     map.pack_forget()
@@ -109,22 +110,35 @@ def toggleMonitoring():
         monitoringF.pack_forget()
     except Exception:
         monitoringF.pack()
-        label = customtkinter.CTkLabel(monitoringF, width=200, height=300,text="")
+        label = customtkinter.CTkLabel(monitoringF, width=200, height=300, text="")
         label.pack()
+
         def stop():
             os.startfile("VISIONXPLORER UI.pyw")
             root.destroy()
-            
-        btn=customtkinter.CTkButton(monitoringF, text="stopcam",command=stop)
-        btn.pack()
+
+        btn = customtkinter.CTkButton(
+            monitoringF,
+            text="Stop Cam",
+            font=("Agency FB", round(fontSize*0.6)),
+            fg_color="#2d9a9d",
+            command=stop,
+        )
+        btn.pack(side="left")
+
+        customtkinter.CTkLabel(monitoringF,
+    text="*stopping this will take few seconds",
+    font=("Agency FB", round(fontSize*0.6)),
+    text_color="red").pack(side="right")
         cap = cv2.VideoCapture(0)
+
         def update_frame():
             ret, frame = cap.read()
             if ret:
-                frame = cv2.resize(frame, (200, 200)) # resize the frame to 200x200
+                frame = cv2.resize(frame, (200, 200))  # resize the frame to 200x200
                 img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                results=model.track(img,persist=True)
-                img=results[0].plot()
+                results = model.track(img, persist=True)
+                img = results[0].plot()
                 img = Image.fromarray(img)
                 imgtk = ImageTk.PhotoImage(image=img)
                 label.imgtk = imgtk
@@ -169,8 +183,6 @@ calculator_img = customtkinter.CTkImage(
     light_image=Image.open("img/calculator.png"),
     size=(round(rootWidth * 0.13), round(rootHeight * 0.23)),
 )
-
-
 
 
 monitoringBtn = customtkinter.CTkButton(
