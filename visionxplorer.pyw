@@ -541,4 +541,6 @@ exitBtn.grid(row=2, column=0, pady=round(rootHeight * 0.01))
 optionsF.grid(row=0, column=0)
 work.grid(row=0, column=1)
 mainF.pack()
-root.mainloop()
+def startUI():
+    root.mainloop()
+startUI()
