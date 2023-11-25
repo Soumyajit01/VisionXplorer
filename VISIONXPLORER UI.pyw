@@ -4,10 +4,7 @@ from time import strftime
 from PIL import Image, ImageTk
 from tkintermapview import TkinterMapView
 from geopy.geocoders import Nominatim
-from numpy import asarray
-from mathFunctions import simplify
 from ultralytics import YOLO
-import os
 import cv2
 from translator import translateToHindi
 from text_recognition import detectText
