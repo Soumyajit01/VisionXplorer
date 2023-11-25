@@ -153,7 +153,7 @@ def toggleTranslationF():
             text_color="red",
         )
         warning.pack(side="left")
-        cap = cv2.VideoCapture("sample_footage.mp4") # change this to '0' for making webcam input source
+        cap = cv2.VideoCapture("sample_footage2.mp4") # change this to '0' for making webcam input source
 
         def update_frame():
             ret, frame = cap.read()
@@ -163,16 +163,15 @@ def toggleTranslationF():
                 cv2.imwrite("tempImg.jpg", frame)
                 try:
                     text=detectText("tempImg.jpg")
-                    toSend=text+"="+str(eval(text))
+                    toSend=text+"="+str(eval(text)) # mathematics
                     detectedText.configure(text=toSend)
                 except Exception:
                     try:
-                        toSend_=translateToHindi(detectText("tempImg.jpg").replace("\n", ""))
-                        print(toSend_)
+                        toSend_=translateToHindi(detectText("tempImg.jpg").replace("\n", "")) #translation
                         detectedText.configure(text=toSend_)
                     except Exception:
-                        toSend__="No text detected!"
-                        print(toSend__)
+                        toSend__="Nothing to calculate/No english text detected"
+                        detectedText.configure(text=toSend__)
                 img = Image.fromarray(img)
                 imgtk = ImageTk.PhotoImage(image=img)
                 label.imgtk = imgtk
