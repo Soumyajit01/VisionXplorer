@@ -45,4 +45,4 @@ As of the last update, the hardware components for the smart glasses were not de
 We plan to continue the development of the VisionXplorer Smart Glasses project and present the complete solution in next year's exhibition.
 
 ## License
-This project is licensed under the MIT License.
+This project is licensed under the Apache 2.0 License.
