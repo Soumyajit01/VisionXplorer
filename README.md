@@ -28,7 +28,7 @@ The software for the VisionXplorer Smart Glasses has been developed and is fully
 
 ## Installation
 
-1. Ensure that Python 3.12 is installed on your system.
+1. Ensure that Python <3.12 is installed on your system.
 2. Clone the repository to your local machine:
 
    ```bash
